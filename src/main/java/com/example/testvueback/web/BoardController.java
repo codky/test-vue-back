@@ -1,10 +1,14 @@
 package com.example.testvueback.web;
 
 import com.example.testvueback.entity.BoardEntity;
+import com.example.testvueback.model.Header;
+import com.example.testvueback.model.SearchCondition;
 import com.example.testvueback.services.BoardService;
 import com.example.testvueback.web.dtos.BoardDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +21,10 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/board/list")
-    public List<BoardDto> boardList() { return boardService.getBoardList(); }
+    public Header<List<BoardDto>> boardList(
+            @PageableDefault(sort = {"idx"}) Pageable pageable, SearchCondition searchCondition) {
+        return boardService.getBoardList(pageable, searchCondition);
+    }
 
     @GetMapping("/board/{id}")
     public BoardDto getBoard(@PathVariable Long id) {
